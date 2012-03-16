@@ -1,0 +1,72 @@
+Adding to MATLAB's Path
+addpath('/Users/zachdischner/Desktop/Dropbox/School_and_Matlab/General_Important_Files')
+
+CREATE TABLE company_list (id bigint(20) unsigned NOT NULL auto_increment, 
+ticker VARCHAR(6) NOT NULL, 
+PRIMARY KEY(id));
+
+mysql> CREATE TABLE EOD (id bigint(20) unsigned NOT NULL,
+    -> date DATETIME default NULL,
+    -> EOD_price DECIMAL(10,3),
+    -> KEY id (id));
+
+ a=importdata('names.csv')  to load, or use the GUI to generate code
+ d=importdata('goodnames.txt')
+
+LOGGING ON:  
+>> mysql('open','localhost','zachd1_618','veyron')
+Connecting to  host=localhost  user=zachd1_618  password=veyron
+
+
+[[[AS "-u root"]]]:
+grant INSERT,SELECT,ALTER,CREATE on stocks.* to 'zachd1_618'@'localhost';
+
+
+
+
+INSERTING VALUES
+ format:  INSERT INTO table_name 
+          (column1, column2, column3,...) 
+          VALUES (value1, value2, value3,....)
+  BAD        INSERT INTO company_list (ticker) VALUES('AAPL','CMG','ARWR'); -does not work, just one at a time
+  GOOD       INSERT INTO company_list (ticker) VALUES ('AAPL');
+    
+
+
+
+BASIC SELECTING VALUES
+    SELECT ticker FROM company_list WHERE id = 1;     (=aapl)
+    SELECT id FROM company_list WHERE ticker = 'ARWR';
+
+    SELECT EOD_PRICE from EOD where id = (select id from company_list where company_list.ticker = 'goog');
+
+
+Loading procedures into mysql. STORED PROCEDURES WOO HOO!!!
+source ~/Desktop/Dropbox/Work/Financial/mysql_procedures.txt;
+calll (funciton name)
+
+
+Maybe get lynx to get this...
+lynx http://www.eoddata.com/Data/symbollist.aspx?e=INDEX
+
+
+PLOTTING COOL DATE DATA
+[date,price]=mysql('select date,EOD_price from eod where id = (select id from company_list where ticker = "rf") ORDER BY date')
+plot(date,price)
+datetick('x','dd-mmm-yyyy')
+
+GETTING more stuff...
+   http://finance.yahoo.com/d/moving_average.csv?s=GOOG&f=jkm3m4
+        -gets the 52 week low (j) high (k), 50 day moving average (m3) and 200 day(m4)
+         for GOOG and puts it in a csv format moving_average.csv
+
+
+
+WORKING WITH DATES IN MYSQL
+select DATE_SUB((select last_date from update_info),INTERVAL 10 DAY);
+
+GET A RANGE OF DATA
+ select date,EOD_price FROM EOD WHERE (date) <= ('2011-08-12')  and date >= SUBDATE('2011-08-12', INTERVAL 50 DAY) AND id = 1
+
+GET MEAN OVER A TIME PERIOD
+ select date,SUM(EOD_price)/COUNT(*) FROM EOD WHERE (date) <= ('2011-08-12')  and date >= SUBDATE('2011-08-12', INTERVAL 50 DAY) AND id = 1

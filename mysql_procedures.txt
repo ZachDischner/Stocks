@@ -1,0 +1,122 @@
+# SELECT get_last_date
+DELIMITER //
+DROP FUNCTION IF EXISTS get_last_date//
+CREATE FUNCTION get_last_date()
+    RETURNS DATETIME
+BEGIN
+    DECLARE max_date DATETIME;
+
+    SELECT MAX(date) into max_date from EOD;
+
+    RETURN(max_date);
+END//
+DELIMITER ;
+
+# Simple function to get the id for a given ticker. Just to make syntax
+# easier to read/shorter
+DELIMITER //
+DROP FUNCTION IF EXISTS GET_id//
+CREATE FUNCTION GET_id(var_ticker VARCHAR(10))
+    RETURNS BIGINT(20)
+BEGIN
+    DECLARE var_id BIGINT(20);
+
+    SELECT id INTO var_id FROM company_list WHERE ticker = var_ticker;
+
+    RETURN(var_id);
+
+END//
+DELIMITER ;
+
+
+# use    SELECT GET_50AVG('2011-08-08',32)
+# Simple funciton, takes last 50 days' EOD trades and averages the values
+# Returns that average
+
+DELIMITER //
+DROP FUNCTION IF EXISTS GET_50AVG//
+CREATE FUNCTION GET_50AVG(end_date DATETIME, ticker_id BIGINT(20))
+    RETURNS DECIMAL(10,3)
+BEGIN
+    DECLARE new_avg DECIMAL(10,3);
+    
+    SELECT SUM(EOD_price)/COUNT(*) 
+            INTO new_avg
+            FROM EOD 
+            WHERE (date) <= (end_date)  and 
+            date >= SUBDATE(end_date, INTERVAL 50 DAY) 
+            AND id = ticker_id;
+
+   
+    RETURN(new_avg);
+END//
+DELIMITER ;
+
+
+#use    SELECT GET_200AVG('2011-08-08',32)
+# Simple funciton, takes last 50 days' EOD trades and averages the values
+# Returns that average
+
+DELIMITER //
+DROP FUNCTION IF EXISTS GET_200AVG//
+CREATE FUNCTION GET_200AVG(end_date DATETIME, ticker_id BIGINT(20))
+    RETURNS DECIMAL(10,3)
+BEGIN
+    DECLARE new_avg DECIMAL(10,3);
+    
+    SELECT SUM(EOD_price)/COUNT(*) 
+            INTO var_avg
+            FROM EOD 
+            WHERE (date) <= (end_date)  and 
+            date >= SUBDATE(end_date, INTERVAL 200 DAY) 
+            AND id = ticker_id;
+
+   
+    RETURN(var_avg);
+END//
+DELIMITER ;
+
+
+# use    SELECT GET_52low(2011-08-09',3)
+# Just finds the minimum value over the last year's trades 
+DELIMITER //
+DROP FUNCTION IF EXISTS GET_52low//
+CREATE FUNCTION GET_52low(end_date DATETIME,ticker_id BIGINT(20))
+    RETURNS DECIMAL(10,3)
+BEGIN
+    DECLARE low DECIMAL(10,3);
+    
+    SELECT MIN(EOD_price)
+            INTO low
+            FROM EOD 
+            WHERE (date) <= (end_date)  and 
+            date >= SUBDATE(end_date, INTERVAL 1 YEAR) 
+            AND id = ticker_id;
+
+   
+    RETURN(low);
+END//
+DELIMITER ;
+
+
+# use    SELECT GET_52high('2011-09-07','ARWR')
+# Just finds the minimum value over the last year's trades 
+DELIMITER //
+DROP FUNCTION IF EXISTS GET_52high//
+CREATE FUNCTION GET_52high(end_date DATETIME,ticker_id BIGINT(20))
+    RETURNS DECIMAL(10,3)
+BEGIN
+    DECLARE high DECIMAL(10,3);
+    
+    SELECT MAX(EOD_price)
+            INTO high
+            FROM EOD 
+            WHERE (date) <= (end_date)  and 
+            date >= SUBDATE(end_date, INTERVAL 1 YEAR) 
+            AND id = ticker_id;
+
+   
+    RETURN(high);
+END//
+DELIMITER ;
+  

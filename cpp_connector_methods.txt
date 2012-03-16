@@ -1,0 +1,30 @@
+I think I compiled the c++ connector with:
+    g++ -v -maci64 -I/usr/local/mysql/include -L/usr/local/mysql/lib -lmysqlclient_r -lpthread mysql.cpp
+from the terminal.
+
+
+When I ran tested the database connector
+   mysql('status')
+I got some serious errors. Turned out mysql just didn't properly install the proper 
+library links:
+
+??? Invalid MEX-file '/Users/zachdischner/Desktop/Dropbox/Work/Financial/mysql.mexmaci64':
+dlopen(/Users/zachdischner/Desktop/Dropbox/Work/Financial/mysql.mexmaci64, 1): Library not loaded:
+libmysqlclient.18.dylib
+  Referenced from: /Users/zachdischner/Desktop/Dropbox/Work/Financial/mysql.mexmaci64
+  Reason: image not found.
+
+So I just needed to relink the proper libraries
+
+sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/lib/libmysqlclient.18.dylib
+
+
+
+Now tested with 
+    mysql('status') --> Not Connected
+
+mysql('open')
+mysql --user=root --password='' menagerie
+     becomes
+             mysql('open','root','','menagerie')
+COOL!!! That means its all working okay. 
