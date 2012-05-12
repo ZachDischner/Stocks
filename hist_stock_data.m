@@ -104,8 +104,7 @@ for i = 1:length(tickers)
         
     % download historical data using the Yahoo! Finance website
     [temp, status] = urlread(strcat('http://ichart.finance.yahoo.com/table.csv?s='...
-        ,tickers{i},'&a=',bm,'&b=',bd,'&c=',by,'&d=',em,'&e=',ed,'&f=',...
-        ey,'&g=',freq,'&ignore=.csv'));
+        ,tickers{i},'&a=',bm,'&b=',bd,'&c=',by,'&d=',em,'&e=',ed,'&f=', '&ignore=.csv'));
     
     if status
         % organize data by using the comma delimiter
