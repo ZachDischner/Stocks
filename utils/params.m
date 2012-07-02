@@ -11,9 +11,9 @@ switch strrep(upper(input),'_',' ')
     case 'DEBUG'
         output = true;
         
-    case 'logID'
-        if params('debug')
-            output = 0;
+    case 'LOGID'
+        if params('DEBUG')
+            output = 1;
         else
             % Gotta Fix This
             currtime = datestr(now,'mmm dd yyyy hh:ss');

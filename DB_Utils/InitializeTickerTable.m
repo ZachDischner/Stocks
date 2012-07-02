@@ -14,7 +14,9 @@ end_date   = datestr(date,'ddmmyyyy');
 
 %% Update the Status Table 
 fprintf(params('logID'),['Updating Status Table, adding row for ',ticker,'\n'])
-mysql(['INSERT INTO status ticker values(',ticker,')'])
+
+DB_Insert('status',ticker);
+
 
 
 %MOVE TO UPDATE!!

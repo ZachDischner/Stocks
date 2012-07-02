@@ -4,10 +4,10 @@
 % In addition, these statemnts should be eventually ported to MySQL
 % stored procedures for speed purposes. Oh well, for later. 
 
-function output = DB_Select(query,spec)
+function output = DB_Select(type,spec)
 
 
-switch strrep(upper(query),'_',' ')
+switch strrep(upper(type),'_',' ')
     % Simplest one, get "Filled To" date for a given ticker 
     case 'FILLED TO'
         cmd = [...
