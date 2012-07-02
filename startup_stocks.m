@@ -1,47 +1,26 @@
 %startup everything
-if ~exist('analysis','dir')
-    mkdir('analysis');
-end
-addpath('analysis')
 
-if ~exist('company_lists','dir')
-    mkdir('company_lists');
-end
-addpath('company_lists')
-
-if ~exist('connection','dir')
-    mkdir('connection');
-end
-addpath('connection')
-
-if ~exist('Documentation','dir')
-    mkdir('Documentation');
-end
-addpath('Documentation')
-
-if ~exist('population','dir')
-    mkdir('population');
-end
-addpath('population')
-
-if ~exist('selection','dir')
-    mkdir('selection');
-end
-addpath('selection')
-
-if ~exist('utils','dir')
-    mkdir('utils');
-end
-addpath('utils')
-
+PathFiles = {...
+             'analysis',...
+             'company_lists',...
+             'connection',...
+             'Documentation',...
+             'DB_Utils',...
+             'selection',...
+             'utils',...
+             'Logs'...
+            };
+        
+AddOrCreatePath(PathFiles);        
 
 
 if mysql('status') == 1
-    mysql('open','localhost','zachd1_618','veyron')
+    mysql('open','localhost','root')
     
     mysql('SHOW databases')
     
-    mysql('USE stocks')
+        mysql('CREATE DATABASE IF NOT EXISTS Stocks')
+    mysql('USE Stocks')
     
     mysql('SHOW tables')
 else

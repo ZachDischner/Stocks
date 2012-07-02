@@ -1,5 +1,33 @@
 % Main script, handles daily task of fetching and updating database
 
+% Steps
+% 
+% [1]--Base (Science) Data
+%  |
+%  |\
+%  | \
+%  |  1A
+%  |   |--Add table to database to accomidate dataset if not defined
+%  |   |--Get Base Dataset For Processing 
+%  |   |--Write base data to Ticker table
+%  |   |--Update "STATUS" table 
+%  |
+% [2] 
+%  |
+%  |\
+%  | \
+%  |  2A
+%  |   |--Read "STATUS" Table for updating tasks
+%  |   |--Perform basic analysis on data
+%  |   |--Update Ticker table
+%  |   |--Update "STATUS" table
+%  |
+
+
+
+
+clc;clear all;close all;
+startup_stocks;
 
 %% Load List of Tickers
 if params('debug')   
@@ -11,17 +39,17 @@ else
 end
 
 
-%% Start Processing
+%% Start Processing LEVEL 1A 
 
-% For each ticker...
-for ii = 1:length(tickers)
-   ticker = tickers(ii);
-   
-   % See if table has already been defined
-   if TableExist(ticker)
-      UpdateTable(ticker); 
-   else
-      InitializeTable(ticker);
-   end
-    
-end
+Perform1AProcessing(tickers)
+
+
+
+
+
+
+
+
+
+
+
