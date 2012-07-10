@@ -1,5 +1,7 @@
-%startup everything
+%% Prepare Workspace
+clc;clear all;close all
 
+%% Prepare Directory Structure
 PathFiles = {...
              'analysis',...
              'company_lists',...
@@ -14,6 +16,7 @@ PathFiles = {...
 AddOrCreatePath(PathFiles);        
 
 
+%% Open the Database Connection
 if mysql('status') == 1
     mysql('open','localhost','root')
     

@@ -9,17 +9,14 @@ fprintf(params('logID'),['Creating table for ',ticker,'\n'])
 CreateTable(ticker);
 
 %% Define bounds for data query
-start_date = datestr(params('Start Date'),'ddmmyyyy');
-end_date   = datestr(date,'ddmmyyyy');
+% start_date = datestr(params('Start Date'),'ddmmyyyy');
+% end_date   = datestr(date,'ddmmyyyy');
 
 %% Update the Status Table 
 fprintf(params('logID'),['Updating Status Table, adding row for ',ticker,'\n'])
 
 DB_Insert('status',ticker);
 
-
-
-%MOVE TO UPDATE!!
 
 
 end

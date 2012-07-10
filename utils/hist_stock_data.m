@@ -95,38 +95,68 @@ end
 %h = waitbar(0, 'Please Wait...');           % create waitbar
 idx = 1;                                    % idx for current stock data
 
-% cycle through each ticker symbol and retrieve historical data
-for i = 1:length(tickers)
-    
-    % update waitbar to display current ticker
-  %  waitbar((i-1)/length(tickers),h,sprintf('%s %s %s%0.2f%s', ...
-  %     'Retrieving stock data for',tickers{i},'(',(i-1)*100/length(tickers),'%)'))
-        
+
+%% Zach's Part, Reform Output If Just One Ticker Query
+if length(tickers) == 1
     % download historical data using the Yahoo! Finance website
     [temp, status] = urlread(strcat('http://ichart.finance.yahoo.com/table.csv?s='...
-        ,tickers{i},'&a=',bm,'&b=',bd,'&c=',by,'&d=',em,'&e=',ed,'&f=', '&ignore=.csv'));
+        ,tickers{1},'&a=',bm,'&b=',bd,'&c=',by,'&d=',em,'&e=',ed,'&f=', '&ignore=.csv'));
     
     if status
-        % organize data by using the comma delimiter
         [date, op, high, low, cl, volume, adj_close] = ...
             strread(temp(43:end),'%s%s%s%s%s%s%s','delimiter',',');
-
-        stocks(idx).Ticker = tickers{i};        % obtain ticker symbol
-        stocks(idx).Date = date;                % save date data
-        stocks(idx).Open = str2double(op);      % save opening price data
-        stocks(idx).High = str2double(high);    % save high price data
-        stocks(idx).Low = str2double(low);      % save low price data
-        stocks(idx).Close = str2double(cl);     % save closing price data
-        stocks(idx).Volume = str2double(volume);      % save volume data
-        stocks(idx).AdjClose = str2double(adj_close); % save adjustied close data
         
-        idx = idx + 1;                          % increment stock index
+        StLen = length(date);
+        % Reform for an array of structures, with earlier indices
+        % corresponding to earlier measurements. 
+        for ii = 0:StLen-1
+            stocks(StLen - ii).Ticker    = tickers{1};
+            stocks(StLen - ii).Date      = date{ii + 1};
+            stocks(StLen - ii).Open      = str2double(op(ii + 1));
+            stocks(StLen - ii).High      = str2double(high(ii + 1));
+            stocks(StLen - ii).Low       = str2double(low(ii + 1));
+            stocks(StLen - ii).Close     = str2double(cl(ii + 1));
+            stocks(StLen - ii).Volume    = str2double(volume(ii + 1));
+            stocks(StLen - ii).AdjClose  = str2double(cl(ii + 1));
+        end
+        
     end
     
-    % clear variables made in for loop for next iteration
-    clear date op high low cl volume adj_close temp status
+else
     
-    % update waitbar
- %   waitbar(i/length(tickers),h)
+    % cycle through each ticker symbol and retrieve historical data
+    for i = 1:length(tickers)
+        
+        % update waitbar to display current ticker
+        %  waitbar((i-1)/length(tickers),h,sprintf('%s %s %s%0.2f%s', ...
+        %     'Retrieving stock data for',tickers{i},'(',(i-1)*100/length(tickers),'%)'))
+        
+        % download historical data using the Yahoo! Finance website
+        [temp, status] = urlread(strcat('http://ichart.finance.yahoo.com/table.csv?s='...
+            ,tickers{i},'&a=',bm,'&b=',bd,'&c=',by,'&d=',em,'&e=',ed,'&f=', '&ignore=.csv'));
+        
+        if status
+            % organize data by using the comma delimiter
+            [date, op, high, low, cl, volume, adj_close] = ...
+                strread(temp(43:end),'%s%s%s%s%s%s%s','delimiter',',');
+            
+            stocks(idx).Ticker = tickers{i};        % obtain ticker symbol
+            stocks(idx).Date = date;                % save date data
+            stocks(idx).Open = str2double(op);      % save opening price data
+            stocks(idx).High = str2double(high);    % save high price data
+            stocks(idx).Low = str2double(low);      % save low price data
+            stocks(idx).Close = str2double(cl);     % save closing price data
+            stocks(idx).Volume = str2double(volume);      % save volume data
+            stocks(idx).AdjClose = str2double(adj_close); % save adjustied close data
+            
+            idx = idx + 1;                          % increment stock index
+        end
+        
+        % clear variables made in for loop for next iteration
+        clear date op high low cl volume adj_close temp status
+        
+        % update waitbar
+        %   waitbar(i/length(tickers),h)
+    end
 end
 %close(h)    % close waitbar

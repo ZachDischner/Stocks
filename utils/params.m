@@ -14,13 +14,18 @@ switch strrep(upper(input),'_',' ')
     case 'LOGID'
         if params('DEBUG')
             output = 1;
-        else
-            % Gotta Fix This
+        else     
             currtime = datestr(now,'mmm dd yyyy hh:ss');
             filename = ['./Logs/',datestr(date,'mm-dd-yyyy'),'_Log.txt'];
-            save(filename,'currtime')
+            if fopen(filename) == -1
+                fid = fopen(filename,'a+');
+                fprintf(['Log for Stocks Processing \t',currtime,'\n\n']);
+                fclose('all');
+            end
+  
             fid = fopen(filename);
-            output = 1; 
+            fprintf([currtime,'\n']);
+            output = fid; 
             
         end
         
