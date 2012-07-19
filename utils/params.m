@@ -6,7 +6,7 @@ function output = params(input)
 switch strrep(upper(input),'_',' ')
     
     case 'START DATE'
-        output = datestr('2008/01/01');
+        output = datestr('2008-01-02');
         
     case 'DEBUG'
         output = true;

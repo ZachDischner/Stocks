@@ -13,9 +13,9 @@ switch strrep(upper(type),'_',' ')
         cmd = [...
             'SELECT Filled_To FROM status WHERE( Ticker = "',spec,'")'
             ];
-    case 'ANALYZED TO'
+    case 'STATS TO'
         cmd = [...
-            'SELECT Analyzed_To FROM status WHERE( Ticker = "',spec,'")'
+            'SELECT Stats_To FROM status WHERE( Ticker = "',spec,'")'
             ];
     case 'COUNT'
         cmd = [...

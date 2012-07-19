@@ -32,8 +32,10 @@ for ii=1:length(data)
     % of structures for single ticker calls, ordered with EARLIER DATE
     % FIRST!!!!!!!!
    this_date = datestr(data(ii).Date,'yyyy-mm-dd');
-   status = DB_Insert('Raw',data(ii));
-   status = DB_Update('Filled To',ticker,this_date);
+   if ~strcmp(this_date, datestr(DB_Select('Filled To',ticker),'yyyy-mm-dd'))
+       status = DB_Insert('Raw',data(ii));
+       status = DB_Update('Filled To',ticker,this_date);
+   end
 end
 
 fprintf(params('logID'),['New table length for:\t',ticker,'\t is \t',num2str(DB_Select('count',ticker)),'\n\n'])
