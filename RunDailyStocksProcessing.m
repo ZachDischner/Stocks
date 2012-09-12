@@ -60,6 +60,12 @@ Perform2AProcessing(tickers);
 
 
 
+%% Start Processing Level 3A
+fprintf('\n\n\n+----------------------------------------------------------------------------------+\n\n\n')
+fprintf(params('LogId'),'Performing 3A Data Analysis \n\n')
+Perform3AProcessing(tickers)
+
+
 
 
 
